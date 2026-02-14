@@ -9,7 +9,7 @@ import { useAuthStore } from "@/stores/auth.store";
 //
 export const api = axios.create({
   baseURL: "http://localhost:3333",
-  withCredentials: true, // VERY IMPORTANT (refresh cookie)
+  withCredentials: true,
 });
 
 // Raw instance bypassing interceptors
@@ -62,7 +62,7 @@ api.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
     };
-    console.log("Res Interceptor Start", useAuthStore.getState());
+
     if (error.response?.status === 401 && !originalRequest?._retry) {
       if (isRefreshing) {
         return new Promise<string>((resolve, reject) => {
@@ -72,7 +72,7 @@ api.interceptors.response.use(
           return api(originalRequest);
         });
       }
-      console.log("Res Interceptor Middle", useAuthStore.getState());
+
       originalRequest._retry = true;
       isRefreshing = true;
 
@@ -95,7 +95,7 @@ api.interceptors.response.use(
         isRefreshing = false;
       }
     }
-    console.log("Res Interceptor End", useAuthStore.getState());
+
     return Promise.reject(error);
   },
 );

@@ -1,5 +1,6 @@
 import { api } from "@/lib/api";
 import { useAuthStore } from "@/stores/auth.store";
+import axios from "axios";
 
 interface SignupData {
   username: string;
@@ -27,9 +28,15 @@ export const signup = async (data: SignupData) => {
     useAuthStore.getState().setUser({ id: userId });
 
     return userId;
-  } catch (err: any) {
-    // Axios throws for non-2xx, so you can catch errors here
-    console.error(err.response?.data || err.message);
+  } catch (err: unknown) {
+    if (axios.isAxiosError(err)) {
+      console.error(err.response?.data?.message ?? err.message);
+    } else if (err instanceof Error) {
+      console.error(err.message);
+    } else {
+      console.error("Unexpected error", err);
+    }
+
     throw err;
   }
 };
