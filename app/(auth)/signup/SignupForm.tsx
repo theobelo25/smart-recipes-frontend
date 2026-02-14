@@ -2,7 +2,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { createUser } from "@/actions/auth";
+import { signup } from "@/actions/auth.actions";
 
 import {
   Card,
@@ -21,31 +21,51 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(2, "Name must be at least 2 characters.")
-    .max(50, "Name must be at most 50 characters."),
-  email: z.email("Invalid email address."),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters.")
-    .max(35, "Password must be at mist 35 characters"),
-});
+const formSchema = z
+  .object({
+    username: z
+      .string()
+      .regex(/^[a-zA-Z\\s-]+$/, {
+        message: "Name must contain only alphabetic characters",
+      })
+      .min(2, "Name must be at least 2 characters.")
+      .max(50, "Name must be at most 50 characters."),
+    email: z.email("Invalid email address."),
+    password: z
+      .string()
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,32}$/, {
+        message:
+          "Password must at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character from the following !@#$%^&*.",
+      })
+      .min(8, "Password must be at least 6 characters.")
+      .max(35, "Password must be at mist 35 characters"),
+    confirmPassword: z
+      .string()
+      .min(8, "Password must be at least 6 characters.")
+      .max(35, "Password must be at mist 35 characters"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 export default function SignupForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      username: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    createUser(data);
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const userId = await signup(data);
+    if (userId) router.push("/");
   }
 
   return (
@@ -60,7 +80,7 @@ export default function SignupForm() {
         <form id="signup-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
-              name="name"
+              name="username"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -108,6 +128,27 @@ export default function SignupForm() {
                     id="password"
                     aria-invalid={fieldState.invalid}
                     placeholder="Password"
+                    autoComplete="off"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              name="confirmPassword"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="confirmPassword">
+                    Confirm Password
+                  </FieldLabel>
+                  <Input
+                    {...field}
+                    id="confirmPassword"
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Confirm password"
                     autoComplete="off"
                   />
                   {fieldState.invalid && (
