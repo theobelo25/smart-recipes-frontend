@@ -5,19 +5,23 @@ import { User } from "@/types/user.types";
 interface AuthState {
   accessToken: string | null;
   user: User | null;
+  isInitialized: boolean;
+
   setAccessToken: (token: string | null) => void;
   setUser: (user: User | null) => void;
-  logout: () => void;
+  setInitialized: (value: boolean) => void;
+  signout: () => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   accessToken: null,
   user: null,
+  isInitialized: false,
 
   setAccessToken: (token) => set({ accessToken: token }),
   setUser: (user) => set({ user }),
-
-  logout: () =>
+  setInitialized: (value) => set({ isInitialized: value }),
+  signout: () =>
     set({
       accessToken: null,
       user: null,

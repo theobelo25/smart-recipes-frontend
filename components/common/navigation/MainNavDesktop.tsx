@@ -1,3 +1,4 @@
+"use client";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -5,12 +6,15 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
+import { useAuthStore } from "@/stores/auth.store";
+import { signout } from "@/actions/auth.actions";
 
 export default function MainNavDesktop({
   navLinks,
 }: {
   navLinks: { name: string; href: string }[];
 }) {
+  const accessToken = useAuthStore((s) => s.accessToken);
   return (
     <>
       <NavigationMenu>
@@ -28,16 +32,28 @@ export default function MainNavDesktop({
       </NavigationMenu>
       <NavigationMenu>
         <NavigationMenuList className="space-x-8">
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href="/login">Login</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link href="/signup">Signup</Link>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
+          {accessToken ? (
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <button type="button" onClick={signout}>
+                  Logout
+                </button>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          ) : (
+            <>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link href="/login">Login</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink asChild>
+                  <Link href="/signup">Signup</Link>
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </>
+          )}
         </NavigationMenuList>
       </NavigationMenu>
     </>

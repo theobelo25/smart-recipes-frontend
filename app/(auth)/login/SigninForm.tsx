@@ -2,7 +2,7 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { signup } from "@/actions/auth.actions";
+import { signin } from "@/actions/auth.actions";
 
 import {
   Card,
@@ -23,84 +23,47 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/stores/auth.store";
-import { useEffect } from "react";
 
-const formSchema = z
-  .object({
-    username: z
-      .string()
-      .regex(/^[a-zA-Z\\s-]+$/, {
-        message: "Name must contain only alphabetic characters",
-      })
-      .min(2, "Name must be at least 2 characters.")
-      .max(50, "Name must be at most 50 characters."),
-    email: z.email("Invalid email address."),
-    password: z
-      .string()
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,32}$/, {
-        message:
-          "Password must at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character from the following !@#$%^&*.",
-      })
-      .min(8, "Password must be at least 6 characters.")
-      .max(35, "Password must be at mist 35 characters"),
-    confirmPassword: z
-      .string()
-      .min(8, "Password must be at least 6 characters.")
-      .max(35, "Password must be at mist 35 characters"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+const formSchema = z.object({
+  email: z.email("Invalid email address."),
+  password: z
+    .string()
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,32}$/, {
+      message:
+        "Password must at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character from the following !@#$%^&*.",
+    })
+    .min(8, "Password must be at least 6 characters.")
+    .max(35, "Password must be at mist 35 characters"),
+});
 
-export default function SignupForm() {
+export default function SigninForm() {
   const router = useRouter();
-
+  const setAccessToken = useAuthStore((s) => s.setAccessToken);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    await signup(data);
-    router.push("/dashboard");
+    await signin(data);
+
+    router.replace("/dashboard");
   }
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Signup</CardTitle>
+        <CardTitle>Login</CardTitle>
         <CardDescription>
-          Create an account to start generating recipes!
+          Log in to your account to keep finding recipes!
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form id="signup-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
-            <Controller
-              name="username"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="name">Name</FieldLabel>
-                  <Input
-                    {...field}
-                    id="name"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Name"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
             <Controller
               name="email"
               control={form.control}
@@ -131,27 +94,6 @@ export default function SignupForm() {
                     id="password"
                     aria-invalid={fieldState.invalid}
                     placeholder="Password"
-                    autoComplete="off"
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-            <Controller
-              name="confirmPassword"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="confirmPassword">
-                    Confirm Password
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="confirmPassword"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="Confirm password"
                     autoComplete="off"
                   />
                   {fieldState.invalid && (

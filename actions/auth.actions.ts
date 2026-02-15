@@ -9,6 +9,11 @@ interface SignupData {
   confirmPassword: string;
 }
 
+interface LoginData {
+  email: string;
+  password: string;
+}
+
 interface AuthResponse {
   userId: string;
   accessToken: string;
@@ -29,6 +34,7 @@ export const signup = async (data: SignupData) => {
 
     return userId;
   } catch (err: unknown) {
+    console.log(err);
     if (axios.isAxiosError(err)) {
       console.error(err.response?.data?.message ?? err.message);
     } else if (err instanceof Error) {
@@ -41,20 +47,30 @@ export const signup = async (data: SignupData) => {
   }
 };
 
-interface ILoginUser {
-  email: string;
-  password: string;
+export async function signin(data: LoginData) {
+  try {
+    const { data: response } = await api.post<AuthResponse>(
+      "/auth/signin",
+      data,
+    );
+
+    const { accessToken, userId } = response;
+    useAuthStore.getState().setAccessToken(accessToken);
+    useAuthStore.getState().setUser({ id: userId });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-export async function loginUser(data: ILoginUser) {
+export async function signout() {
   try {
-    const response = await fetch("http://localhost:3333/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    useAuthStore.getState().signout();
+
+    const { data: response } = await api.post<AuthResponse>(
+      "/auth/signout",
+      {},
+      { withCredentials: true },
+    );
 
     console.log(response);
   } catch (error) {

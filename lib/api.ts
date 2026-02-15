@@ -89,7 +89,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (err) {
         processQueue(err, null);
-        useAuthStore.getState().logout();
+        useAuthStore.getState().signout();
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
