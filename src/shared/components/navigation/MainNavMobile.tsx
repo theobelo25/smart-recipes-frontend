@@ -1,28 +1,26 @@
+"use client";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/src/shared/ui/button";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from "@/src/shared/ui/sheet";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import { useAuthStore } from "@/features/auth/store/auth.store";
-import { signout } from "@/actions/auth.actions";
+} from "@/src/shared/ui/navigation-menu";
+import UserMenu from "./UserMenu";
 
 export default function MainNavMobile({
   navLinks,
 }: {
   navLinks: { name: string; href: string }[];
 }) {
-  const accessToken = useAuthStore((s) => s.accessToken);
-
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -45,32 +43,7 @@ export default function MainNavMobile({
             })}
           </NavigationMenuList>
         </NavigationMenu>
-        <NavigationMenu>
-          <NavigationMenuList className="space-x-8">
-            {accessToken ? (
-              <NavigationMenuItem>
-                <NavigationMenuLink asChild>
-                  <button type="button" onClick={signout}>
-                    Logout
-                  </button>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            ) : (
-              <>
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link href="/login">Login</Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink asChild>
-                    <Link href="/signup">Signup</Link>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </>
-            )}
-          </NavigationMenuList>
-        </NavigationMenu>
+        <UserMenu />
       </SheetContent>
     </Sheet>
   );

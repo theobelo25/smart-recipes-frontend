@@ -1,8 +1,7 @@
 "use client";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { signup } from "@/actions/auth.actions";
+import { signup } from "@/src/features/auth";
 
 import {
   Card,
@@ -11,51 +10,23 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/shared/ui/card";
+} from "@/src/shared/ui/card";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/shared/ui/field";
-import { Input } from "@/shared/ui/input";
-import { Button } from "@/shared/ui/button";
-import { useRouter } from "next/navigation";
-
-const formSchema = z
-  .object({
-    username: z
-      .string()
-      .regex(/^[a-zA-Z\\s-]+$/, {
-        message: "Name must contain only alphabetic characters",
-      })
-      .min(2, "Name must be at least 2 characters.")
-      .max(50, "Name must be at most 50 characters."),
-    email: z.email("Invalid email address."),
-    password: z
-      .string()
-      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,32}$/, {
-        message:
-          "Password must at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character from the following !@#$%^&*.",
-      })
-      .min(8, "Password must be at least 6 characters.")
-      .max(35, "Password must be at mist 35 characters"),
-    confirmPassword: z
-      .string()
-      .min(8, "Password must be at least 6 characters.")
-      .max(35, "Password must be at mist 35 characters"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+} from "@/src/shared/ui/field";
+import { Input } from "@/src/shared/ui/input";
+import { Button } from "@/src/shared/ui/button";
+import { useAuthStore, signupSchema, SignupDto } from "@/src/features/auth";
 
 export function SignupForm() {
-  const router = useRouter();
+  const setAccessToken = useAuthStore((s) => s.setAccessToken);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<SignupDto>({
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       username: "",
       email: "",
@@ -64,9 +35,13 @@ export function SignupForm() {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    await signup(data);
-    router.push("/dashboard");
+  async function onSubmit(data: SignupDto) {
+    try {
+      const { accessToken } = await signup(data);
+      setAccessToken(accessToken);
+    } catch {
+      console.error("Invalid credentials");
+    }
   }
 
   return (
@@ -163,11 +138,20 @@ export function SignupForm() {
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          <Button type="button" variant="outline" onClick={() => form.reset()}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => form.reset()}
+            disabled={form.formState.isSubmitting}
+          >
             Reset
           </Button>
-          <Button type="submit" form="signup-form">
-            Submit
+          <Button
+            type="submit"
+            form="signup-form"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? "Signing up..." : "Submit"}
           </Button>
         </Field>
       </CardFooter>

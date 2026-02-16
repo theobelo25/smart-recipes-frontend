@@ -7,7 +7,7 @@ export * from "./components/SigninForm";
 export * from "./store/auth.store";
 
 // Api
-export * from "./api/auth.api2";
+export * from "./api/auth.api";
 export { authAxios } from "./interceptors/auth.interceptors";
 
 // Types

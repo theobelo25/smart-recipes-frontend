@@ -1,5 +1,5 @@
-import MainNavDesktop from "./navigation/MainNavDesktop";
-import MainNavMobile from "./navigation/MainNavMobile";
+import MainNavDesktop from "../navigation/MainNavDesktop";
+import MainNavMobile from "../navigation/MainNavMobile";
 
 const navLinks = [{ name: "Home", href: "/" }];
 

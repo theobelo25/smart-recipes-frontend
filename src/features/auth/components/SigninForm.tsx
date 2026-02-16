@@ -1,8 +1,7 @@
 "use client";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { signin } from "@/actions/auth.actions";
+import { signin } from "@/src/features/auth";
 
 import {
   Card,
@@ -11,52 +10,54 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/shared/ui/card";
+} from "@/src/shared/ui/card";
 import {
   Field,
   FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
-} from "@/shared/ui/field";
-import { Input } from "@/shared/ui/input";
-import { Button } from "@/shared/ui/button";
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/features/auth";
-
-const formSchema = z.object({
-  email: z.email("Invalid email address."),
-  password: z
-    .string()
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,32}$/, {
-      message:
-        "Password must at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character from the following !@#$%^&*.",
-    })
-    .min(8, "Password must be at least 6 characters.")
-    .max(35, "Password must be at mist 35 characters"),
-});
-
+} from "@/src/shared/ui/field";
+import { Input } from "@/src/shared/ui/input";
+import { Button } from "@/src/shared/ui/button";
+import { useAuthStore, signinSchema, SigninDto } from "@/src/features/auth";
+import { useRouter, useSearchParams } from "next/navigation";
 export function SigninForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+
+  const form = useForm<SigninDto>({
+    resolver: zodResolver(signinSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    await signin(data);
+  async function onSubmit(data: SigninDto) {
+    try {
+      const { accessToken } = await signin(data);
+      setAccessToken(accessToken);
+      const redirectParam = searchParams.get("redirect");
+      const redirectTo =
+        redirectParam && redirectParam.startsWith("/")
+          ? redirectParam
+          : "/dashboard";
 
-    router.replace("/dashboard");
+      router.replace(redirectTo);
+
+      // optional but can help ensure middleware/cookie state is re-evaluated:
+      router.refresh();
+    } catch {
+      console.error("Invalid credentials");
+    }
   }
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Login</CardTitle>
+        <CardTitle>Signin</CardTitle>
         <CardDescription>
           Log in to your account to keep finding recipes!
         </CardDescription>
@@ -107,11 +108,20 @@ export function SigninForm() {
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
-          <Button type="button" variant="outline" onClick={() => form.reset()}>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => form.reset()}
+            disabled={form.formState.isSubmitting}
+          >
             Reset
           </Button>
-          <Button type="submit" form="signup-form">
-            Submit
+          <Button
+            type="submit"
+            form="signup-form"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? "Signing in..." : "Submit"}
           </Button>
         </Field>
       </CardFooter>

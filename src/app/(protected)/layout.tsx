@@ -1,8 +1,8 @@
-"use client";
+// "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/src/features/auth";
+// import { useEffect } from "react";
+// import { useRouter, usePathname } from "next/navigation";
+// import { useAuthStore } from "@/src/features/auth";
 import Header from "@/src/shared/components/layout/Header";
 
 export default function ProtectedLayout({
@@ -10,18 +10,18 @@ export default function ProtectedLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-  const accessToken = useAuthStore((s) => s.accessToken);
-  const isInitialized = useAuthStore((s) => s.isInitialized);
+  // const router = useRouter();
+  // const pathname = usePathname();
+  // const accessToken = useAuthStore((s) => s.accessToken);
+  // const isInitialized = useAuthStore((s) => s.isInitialized);
 
-  useEffect(() => {
-    if (isInitialized && !accessToken) {
-      router.replace("/login");
-    }
-  }, [accessToken, router, isInitialized]);
+  // useEffect(() => {
+  //   if (isInitialized && !accessToken) {
+  //     router.replace(`/login?redirect=${encodeURIComponent(pathname)}`);
+  //   }
+  // }, [accessToken, router, isInitialized, pathname]);
 
-  if (!isInitialized) return null;
-  if (!accessToken) return null;
+  // if (!isInitialized || !accessToken) return null;
 
   return (
     <>
