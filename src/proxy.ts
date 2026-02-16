@@ -1,28 +1,29 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { protectedRoutes, authRoutes } from "@/src/shared/config/routes";
+import {
+  PROTECTED_PATH_PREFIXES,
+  AUTH_PATH_PREFIXES,
+  ROUTE_BY_ID,
+} from "@/src/shared/routing/routes";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const isProtectedRoute = protectedRoutes.some((path) =>
-    pathname.startsWith(path),
+  const isProtectedRoute = PROTECTED_PATH_PREFIXES.some((p) =>
+    pathname.startsWith(p),
+  );
+  const isAuthRoute = AUTH_PATH_PREFIXES.some((p) =>
+    pathname.startsWith(p.path),
   );
 
-  const isAuthRoute = authRoutes.some((path) => pathname.startsWith(path));
-
-  if (!isProtectedRoute && !isAuthRoute) {
-    return NextResponse.next();
-  }
+  if (!isProtectedRoute && !isAuthRoute) return NextResponse.next();
 
   const refreshToken = request.cookies.get("refreshToken");
 
   if (isProtectedRoute && !refreshToken) {
-    const loginUrl = new URL("/signin", request.url);
-
-    loginUrl.searchParams.set("redirect", pathname);
-
-    return NextResponse.redirect(loginUrl);
+    const signinUrl = new URL(ROUTE_BY_ID.signin.path, request.url);
+    signinUrl.searchParams.set("redirect", pathname);
+    return NextResponse.redirect(signinUrl);
   }
 
   if (isAuthRoute && refreshToken) {
@@ -30,14 +31,10 @@ export function proxy(request: NextRequest) {
     const redirectTo =
       redirectParam && redirectParam.startsWith("/")
         ? redirectParam
-        : "/dashboard";
+        : ROUTE_BY_ID.dashboard.path;
 
     return NextResponse.redirect(new URL(redirectTo, request.url));
   }
 
   return NextResponse.next();
 }
-
-export const config = {
-  matcher: ["/:path*"],
-};

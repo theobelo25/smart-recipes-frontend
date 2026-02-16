@@ -22,6 +22,7 @@ import { Input } from "@/src/shared/ui/input";
 import { Button } from "@/src/shared/ui/button";
 import { useAuthStore, signupSchema, SignupDto } from "@/src/features/auth";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export function SignupForm() {
   const router = useRouter();
@@ -60,7 +61,9 @@ export function SignupForm() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Signup</CardTitle>
+        <CardTitle>
+          <h1>Signup</h1>
+        </CardTitle>
         <CardDescription>
           Create an account to start generating recipes!
         </CardDescription>
@@ -151,6 +154,9 @@ export function SignupForm() {
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
+          <p className="block w-full">
+            Already have an account? <Link href="/signin">Signin</Link> instead!
+          </p>
           <Button
             type="button"
             variant="outline"

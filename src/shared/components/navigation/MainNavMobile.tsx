@@ -15,12 +15,9 @@ import {
   NavigationMenuList,
 } from "@/src/shared/ui/navigation-menu";
 import UserMenu from "./UserMenu";
+import { RouteMeta } from "../../routing/routes";
 
-export default function MainNavMobile({
-  navLinks,
-}: {
-  navLinks: { name: string; href: string }[];
-}) {
+export default function MainNavMobile({ navLinks }: { navLinks: RouteMeta[] }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -34,9 +31,9 @@ export default function MainNavMobile({
           <NavigationMenuList>
             {navLinks.map((link) => {
               return (
-                <NavigationMenuItem key={link.name}>
+                <NavigationMenuItem key={link.id}>
                   <NavigationMenuLink asChild>
-                    <Link href={link.href}>{link.name}</Link>
+                    <Link href={link.path}>{link.label}</Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               );

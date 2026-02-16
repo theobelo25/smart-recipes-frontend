@@ -22,6 +22,7 @@ import { Input } from "@/src/shared/ui/input";
 import { Button } from "@/src/shared/ui/button";
 import { useAuthStore, signinSchema, SigninDto } from "@/src/features/auth";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 export function SigninForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -57,7 +58,9 @@ export function SigninForm() {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Signin</CardTitle>
+        <CardTitle>
+          <h1>Signin</h1>
+        </CardTitle>
         <CardDescription>
           Log in to your account to keep finding recipes!
         </CardDescription>
@@ -108,6 +111,10 @@ export function SigninForm() {
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal">
+          <p className="block w-full">
+            Don&apos;t have an account? <Link href="/signup">Signup</Link>{" "}
+            instead!
+          </p>
           <Button
             type="button"
             variant="outline"

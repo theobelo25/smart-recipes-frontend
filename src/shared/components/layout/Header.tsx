@@ -1,7 +1,7 @@
 import MainNavDesktop from "../navigation/MainNavDesktop";
 import MainNavMobile from "../navigation/MainNavMobile";
 
-const navLinks = [{ name: "Home", href: "/" }];
+import { HEADER_LINKS } from "@/src/shared/routing/routes";
 
 export default function Header() {
   return (
@@ -11,10 +11,10 @@ export default function Header() {
         id="desktop-navigation"
         className="hidden md:flex w-[80%] justify-between"
       >
-        <MainNavDesktop navLinks={navLinks} />
+        <MainNavDesktop navLinks={HEADER_LINKS} />
       </div>
       <div id="mobile-navigation" className="md:hidden">
-        <MainNavMobile navLinks={navLinks} />
+        <MainNavMobile navLinks={HEADER_LINKS} />
       </div>
     </header>
   );
