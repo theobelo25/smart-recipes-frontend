@@ -21,8 +21,11 @@ import {
 import { Input } from "@/src/shared/ui/input";
 import { Button } from "@/src/shared/ui/button";
 import { useAuthStore, signupSchema, SignupDto } from "@/src/features/auth";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export function SignupForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
 
   const form = useForm<SignupDto>({
@@ -39,6 +42,16 @@ export function SignupForm() {
     try {
       const { accessToken } = await signup(data);
       setAccessToken(accessToken);
+      const redirectParam = searchParams.get("redirect");
+      const redirectTo =
+        redirectParam && redirectParam.startsWith("/")
+          ? redirectParam
+          : "/dashboard";
+
+      router.replace(redirectTo);
+
+      // optional but can help ensure middleware/cookie state is re-evaluated:
+      router.refresh();
     } catch {
       console.error("Invalid credentials");
     }
