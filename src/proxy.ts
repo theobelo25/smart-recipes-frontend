@@ -12,9 +12,7 @@ export function proxy(request: NextRequest) {
   const isProtectedRoute = PROTECTED_PATH_PREFIXES.some((p) =>
     pathname.startsWith(p),
   );
-  const isAuthRoute = AUTH_PATH_PREFIXES.some((p) =>
-    pathname.startsWith(p.path),
-  );
+  const isAuthRoute = AUTH_PATH_PREFIXES.some((p) => pathname.startsWith(p));
 
   if (!isProtectedRoute && !isAuthRoute) return NextResponse.next();
 

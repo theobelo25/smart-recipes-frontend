@@ -1,19 +1,12 @@
 export type RouteMeta = Readonly<{
   id: string;
-  path: "/" | `/${string}`;
+  path: `/${string}`;
   label?: string;
   protected?: boolean;
   showInHeader?: boolean;
 }>;
 
 export const ROUTES = [
-  {
-    id: "home",
-    path: "/",
-    label: "Home",
-    protected: false,
-    showInHeader: false,
-  },
   {
     id: "dashboard",
     path: "/dashboard",
@@ -50,16 +43,18 @@ export const ROUTE_BY_ID = Object.fromEntries(
 export const PROTECTED_PATH_PREFIXES = ROUTES.filter((r) => r.protected).map(
   (r) => r.path,
 );
-export const AUTH_PATH_PREFIXES = ROUTES.filter(
-  (r) => r.id !== "home" && !r.protected,
-).map((r) => ({
+
+export const AUTH_PATH_PREFIXES = ROUTES.filter((r) => !r.protected).map(
+  (r) => r.path,
+);
+
+export const AUTH_LINKS = ROUTES.filter((r) => !r.protected).map((r) => ({
   id: r.id,
   path: r.path,
   label: r.label,
 }));
-export const HEADER_LINKS = ROUTES.filter(
-  (r) => r.id !== "home" && r.showInHeader,
-).map((r) => ({
+
+export const HEADER_LINKS = ROUTES.filter((r) => r.showInHeader).map((r) => ({
   id: r.id,
   path: r.path,
   label: r.label,
