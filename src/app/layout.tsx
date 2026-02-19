@@ -1,5 +1,7 @@
 import { AuthInitializer } from "@/src/features/auth";
+import { ThemeProvider } from "@/src/shared/components/providers/ThemeProvider";
 import "./globals.css";
+import Header from "../shared/components/layout/Header";
 
 export default function RootLayout({
   children,
@@ -9,7 +11,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`}>
-        <AuthInitializer>{children}</AuthInitializer>
+        <AuthInitializer>
+          <ThemeProvider>
+            <Header />
+            {children}
+          </ThemeProvider>
+        </AuthInitializer>
       </body>
     </html>
   );

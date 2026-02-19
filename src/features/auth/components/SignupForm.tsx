@@ -50,8 +50,6 @@ export function SignupForm() {
           : "/dashboard";
 
       router.replace(redirectTo);
-
-      // optional but can help ensure middleware/cookie state is re-evaluated:
       router.refresh();
     } catch {
       console.error("Invalid credentials");
@@ -76,10 +74,10 @@ export function SignupForm() {
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor="name">Name</FieldLabel>
+                  <FieldLabel htmlFor="username">Name</FieldLabel>
                   <Input
                     {...field}
-                    id="name"
+                    id="username"
                     aria-invalid={fieldState.invalid}
                     placeholder="Name"
                     autoComplete="off"
@@ -99,6 +97,7 @@ export function SignupForm() {
                   <Input
                     {...field}
                     id="email"
+                    type="text"
                     aria-invalid={fieldState.invalid}
                     placeholder="Email"
                     autoComplete="off"
@@ -118,6 +117,7 @@ export function SignupForm() {
                   <Input
                     {...field}
                     id="password"
+                    type="password"
                     aria-invalid={fieldState.invalid}
                     placeholder="Password"
                     autoComplete="off"
@@ -139,6 +139,7 @@ export function SignupForm() {
                   <Input
                     {...field}
                     id="confirmPassword"
+                    type="password"
                     aria-invalid={fieldState.invalid}
                     placeholder="Confirm password"
                     autoComplete="off"

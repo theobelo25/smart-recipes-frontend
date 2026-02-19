@@ -1,31 +1,32 @@
 "use client";
-
 import { useEffect } from "react";
 import { useAuthStore } from "../store/auth.store";
-import { refresh } from "../api/auth.api";
-
+import { AuthManager } from "@/src/shared/lib/auth/auth.manager";
 import { LoadingSpinner } from "@/src/shared/components/LoadingSpinner";
 
 export function AuthInitializer({ children }: { children: React.ReactNode }) {
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
+  const setAuthManager = useAuthStore((s) => s.setAuthManager);
   const setInitialized = useAuthStore((s) => s.setInitialized);
+
+  const authManager = useAuthStore((s) => s.authManager);
   const isInitialized = useAuthStore((s) => s.isInitialized);
 
   useEffect(() => {
-    const initAuth = async () => {
-      try {
-        const { accessToken } = await refresh();
+    if (authManager) return;
 
-        setAccessToken(accessToken);
-      } catch {
-        setAccessToken(null);
+    const mgr = new AuthManager(setAccessToken);
+    setAuthManager(mgr);
+
+    (async () => {
+      try {
+        await mgr.init();
       } finally {
+        // ✅ initialized means: we attempted boot refresh and we're done
         setInitialized(true);
       }
-    };
-
-    if (!isInitialized) initAuth();
-  }, [setAccessToken, setInitialized, isInitialized]);
+    })();
+  }, [authManager, setAccessToken, setAuthManager, setInitialized]);
 
   if (!isInitialized) return <LoadingSpinner />;
 

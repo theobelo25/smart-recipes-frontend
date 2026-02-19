@@ -2,7 +2,8 @@ import { z } from "zod";
 
 export interface User {
   id: string;
-  //   name: string;
+  username: string;
+  email: string;
 }
 
 export const signupSchema = z

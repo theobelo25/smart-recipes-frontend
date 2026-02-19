@@ -1,34 +1,10 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
-import { refresh } from "../api/auth.api";
 import { useAuthStore } from "../store/auth.store";
 
 export const authAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
-
-/**
- * -----------------------------
- * REFRESH LOCK STATE
- * -----------------------------
- */
-let isRefreshing = false;
-let failedQueue: {
-  resolve: (value?: unknown) => void;
-  reject: (error?: unknown) => void;
-}[] = [];
-
-const processQueue = (error: unknown, token: string | null = null) => {
-  failedQueue.forEach((promise) => {
-    if (error) {
-      promise.reject(error);
-    } else {
-      promise.resolve(token);
-    }
-  });
-
-  failedQueue = [];
-};
 
 /**
  * -----------------------------
@@ -53,57 +29,45 @@ authAxios.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 authAxios.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & {
-      _retry?: boolean;
-    };
+    const originalRequest = error.config as
+      | (InternalAxiosRequestConfig & {
+          _retry?: boolean;
+        })
+      | undefined;
 
+    if (!originalRequest) return Promise.reject(error);
+
+    // never try to refresh if the refresh endpoint itself fails
+    if (originalRequest.url?.includes("/auth/refresh")) {
+      return Promise.reject(error);
+    }
+
+    // only handle 401s once per request
     if (error.response?.status !== 401 || originalRequest._retry) {
       return Promise.reject(error);
     }
 
     originalRequest._retry = true;
 
-    /**
-     * If already refreshing → queue this request
-     */
-    if (isRefreshing) {
-      return new Promise((resolve, reject) => {
-        failedQueue.push({ resolve, reject });
-      })
-        .then((token) => {
-          if (originalRequest.headers) {
-            originalRequest.headers.Authorization = `Bearer ${token}`;
-          }
-          return authAxios(originalRequest);
-        })
-        .catch((err) => Promise.reject(err));
-    }
-
-    /**
-     * Start refresh
-     */
-    isRefreshing = true;
-
     try {
-      const { accessToken } = await refresh();
+      const mgr = useAuthStore.getState().authManager;
 
-      useAuthStore.getState().setAccessToken(accessToken);
+      // If manager isn't ready yet, fail fast (app likely not initialized)
+      if (!mgr) return Promise.reject(error);
 
-      processQueue(null, accessToken);
+      const newToken = await mgr.refreshNow();
+      if (!newToken) return Promise.reject(error);
 
       if (originalRequest.headers) {
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        originalRequest.headers.Authorization = `Bearer ${newToken}`;
       }
 
       return authAxios(originalRequest);
     } catch (refreshError) {
-      processQueue(refreshError, null);
-
-      useAuthStore.getState().signout();
-
+      // AuthManager typically clears token itself on failure.
+      // If you want belt-and-suspenders, you can also call signout here:
+      // useAuthStore.getState().signout();
       return Promise.reject(refreshError);
-    } finally {
-      isRefreshing = false;
     }
   },
 );

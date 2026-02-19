@@ -1,4 +1,4 @@
-import Header from "@/src/shared/components/layout/Header";
+import { DashboardHeader } from "@/src/features/dashboard/components";
 
 export default function ProtectedLayout({
   children,
@@ -7,7 +7,7 @@ export default function ProtectedLayout({
 }) {
   return (
     <>
-      <Header />
+      <DashboardHeader />
       {children}
     </>
   );

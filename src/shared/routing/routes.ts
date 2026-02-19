@@ -58,4 +58,5 @@ export const HEADER_LINKS = ROUTES.filter((r) => r.showInHeader).map((r) => ({
   id: r.id,
   path: r.path,
   label: r.label,
+  protected: r.protected,
 }));

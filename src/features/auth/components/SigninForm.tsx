@@ -47,8 +47,6 @@ export function SigninForm() {
           : "/dashboard";
 
       router.replace(redirectTo);
-
-      // optional but can help ensure middleware/cookie state is re-evaluated:
       router.refresh();
     } catch {
       console.error("Invalid credentials");
@@ -66,7 +64,7 @@ export function SigninForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form id="signup-form" onSubmit={form.handleSubmit(onSubmit)}>
+        <form id="signin-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
               name="email"
@@ -96,6 +94,7 @@ export function SigninForm() {
                   <Input
                     {...field}
                     id="password"
+                    type="password"
                     aria-invalid={fieldState.invalid}
                     placeholder="Password"
                     autoComplete="off"

@@ -18,15 +18,13 @@ export default function MainNavDesktop({
     <>
       <NavigationMenu>
         <NavigationMenuList>
-          {navLinks.map((link) => {
-            return (
-              <NavigationMenuItem key={link.id}>
-                <NavigationMenuLink asChild>
-                  <Link href={link.path}>{link.label}</Link>
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            );
-          })}
+          {navLinks.map((link) => (
+            <NavigationMenuItem key={link.id}>
+              <NavigationMenuLink asChild>
+                <Link href={link.path}>{link.label}</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          ))}
         </NavigationMenuList>
       </NavigationMenu>
       <UserMenu />
