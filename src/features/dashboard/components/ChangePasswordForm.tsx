@@ -36,7 +36,6 @@ export function ChangePasswordForm() {
   });
 
   async function onSubmit(data: ChangePasswordDto) {
-    console.log(accessToken);
     try {
       const response = await changePassword(data, accessToken);
 

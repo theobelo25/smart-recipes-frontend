@@ -10,14 +10,15 @@ export const signup = async (signupDto: SignupDto) => {
 };
 
 export const signin = async (signinDto: SigninDto): Promise<SigninResponse> => {
-  const { data } = await baseAxios.post("/auth/signin", signinDto, {
+  const response = await baseAxios.post("/auth/signin", signinDto, {
     withCredentials: true,
   });
-  return data;
+
+  return response.data;
 };
 
 export const signout = async () => {
-  await authAxios.post("/auth/signout");
+  await baseAxios.post("/auth/signout");
 };
 
 export const refresh = async () => {

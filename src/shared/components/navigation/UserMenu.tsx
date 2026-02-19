@@ -13,13 +13,13 @@ import { DarkModeToggle } from "@/src/shared/components/layout/DarkModeToggle";
 export default function UserMenu() {
   const accessToken = useAuthStore((s) => s.accessToken);
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
-  const signout = useAuthStore((s) => s.signout);
+  const signoutStore = useAuthStore((s) => s.signout);
 
   const handleSignout = async () => {
     try {
       await signout();
     } finally {
-      signout();
+      signoutStore();
       setAccessToken(null);
 
       window.location.assign("/signin"); // hard redirect = middleware runs for sure
