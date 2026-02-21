@@ -1,7 +1,9 @@
+import { User } from "@/src/features/auth";
 import { baseAxios } from "../axios";
 import { getAccessTokenExpiryMs } from "./jwt.utils";
 
 type SetAccessToken = (token: string | null) => void;
+type SetUser = (user: User | null) => void;
 
 export class AuthManager {
   private refreshTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -12,6 +14,7 @@ export class AuthManager {
 
   constructor(
     private readonly setAccessToken: SetAccessToken,
+    private readonly setUser: SetUser,
     private readonly refreshEndpoint = "/auth/refresh",
   ) {}
 
@@ -47,6 +50,16 @@ export class AuthManager {
     this.inFlightRefresh = null;
   }
 
+  reset() {
+    this.clearTimer();
+    this.inFlightRefresh = null;
+  }
+
+  invalidateSession() {
+    this.sessionVersion += 1;
+    this.reset();
+  }
+
   async refreshNow(): Promise<string | null> {
     if (this.inFlightRefresh) return this.inFlightRefresh;
 
@@ -55,16 +68,22 @@ export class AuthManager {
     this.inFlightRefresh = (async () => {
       try {
         const res = await baseAxios.post(this.refreshEndpoint, {});
+
         const newToken = res.data?.accessToken as string | undefined;
         if (!newToken) throw new Error("No accessToken returned");
+
+        const user = res.data?.user as User | undefined;
+        if (!user) throw new Error("No user found");
 
         // ✅ if logout happened mid-flight, ignore the result
         if (this.sessionVersion !== versionAtStart) return null;
 
+        this.setUser(user);
         this.setAccessToken(newToken);
         return newToken;
       } catch {
         if (this.sessionVersion === versionAtStart) {
+          this.setUser(null);
           this.setAccessToken(null);
           this.clear();
         }

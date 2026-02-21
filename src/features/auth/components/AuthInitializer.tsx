@@ -8,6 +8,7 @@ export function AuthInitializer({ children }: { children: React.ReactNode }) {
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
   const setAuthManager = useAuthStore((s) => s.setAuthManager);
   const setInitialized = useAuthStore((s) => s.setInitialized);
+  const setUser = useAuthStore((s) => s.setUser);
 
   const authManager = useAuthStore((s) => s.authManager);
   const isInitialized = useAuthStore((s) => s.isInitialized);
@@ -15,18 +16,17 @@ export function AuthInitializer({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (authManager) return;
 
-    const mgr = new AuthManager(setAccessToken);
+    const mgr = new AuthManager(setAccessToken, setUser);
     setAuthManager(mgr);
 
     (async () => {
       try {
         await mgr.init();
       } finally {
-        // ✅ initialized means: we attempted boot refresh and we're done
         setInitialized(true);
       }
     })();
-  }, [authManager, setAccessToken, setAuthManager, setInitialized]);
+  }, [authManager, setAccessToken, setAuthManager, setInitialized, setUser]);
 
   if (!isInitialized) return <LoadingSpinner />;
 

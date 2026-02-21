@@ -9,20 +9,19 @@ import { useAuthStore } from "@/src/features/auth";
 import { signout } from "@/src/features/auth";
 import { AUTH_LINKS } from "../../routing/routes";
 import { DarkModeToggle } from "@/src/shared/components/layout/DarkModeToggle";
+import { useRouter } from "next/navigation";
 
 export default function UserMenu() {
   const accessToken = useAuthStore((s) => s.accessToken);
-  const setAccessToken = useAuthStore((s) => s.setAccessToken);
   const signoutStore = useAuthStore((s) => s.signout);
+  const router = useRouter();
 
   const handleSignout = async () => {
     try {
       await signout();
     } finally {
       signoutStore();
-      setAccessToken(null);
-
-      window.location.assign("/signin"); // hard redirect = middleware runs for sure
+      router.replace("/signin");
     }
   };
 

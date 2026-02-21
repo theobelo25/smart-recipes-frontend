@@ -28,6 +28,7 @@ export function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
+  const setUser = useAuthStore((s) => s.setUser);
 
   const form = useForm<SignupDto>({
     resolver: zodResolver(signupSchema),
@@ -41,7 +42,8 @@ export function SignupForm() {
 
   async function onSubmit(data: SignupDto) {
     try {
-      const { accessToken } = await signup(data);
+      const { accessToken, user } = await signup(data);
+      setUser(user);
       setAccessToken(accessToken);
       const redirectParam = searchParams.get("redirect");
       const redirectTo =
@@ -50,7 +52,7 @@ export function SignupForm() {
           : "/dashboard";
 
       router.replace(redirectTo);
-      router.refresh();
+      // router.refresh();
     } catch {
       console.error("Invalid credentials");
     }
