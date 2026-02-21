@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { User } from "../types";
+import { User } from "@/src/features/auth";
 import { AuthManager } from "@/src/shared/lib/auth/auth.manager";
 
 interface AuthState {
@@ -32,8 +32,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({
       accessToken: null,
       user: null,
-      isInitialized: true,
     });
-    get().authManager?.clear();
+    get().authManager?.invalidateSession();
   },
 }));

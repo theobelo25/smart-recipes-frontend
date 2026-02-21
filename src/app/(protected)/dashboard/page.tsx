@@ -1,11 +1,9 @@
 import {
-  DashboardNavigation,
   GenerateRecipes,
   MealPlans,
   PantryItems,
   SavedRecipes,
   ShoppingList,
-  DashboardHeader,
 } from "@/src/features/dashboard/components";
 
 export default function DashboardPage() {

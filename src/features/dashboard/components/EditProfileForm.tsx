@@ -24,7 +24,7 @@ import { editProfile } from "../api/dashboard.api";
 
 export function EditProfileForm() {
   const router = useRouter();
-  const { accessToken, setUser, user } = useAuthStore((s) => s);
+  const { setUser, user } = useAuthStore((s) => s);
 
   const form = useForm<EditProfileDto>({
     resolver: zodResolver(editProfileSchema),
@@ -35,7 +35,7 @@ export function EditProfileForm() {
 
   async function onSubmit(data: EditProfileDto) {
     try {
-      const response = await editProfile(data, accessToken);
+      const response = await editProfile(data);
 
       setUser(response.data);
 
