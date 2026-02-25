@@ -13,7 +13,7 @@ export default function DashboardPage() {
         <section className="grid grid-cols-12 gap-8 w-full">
           <SavedRecipes className="col-span-4" />
           <PantryItems className="col-span-4" />
-          <GenerateRecipes className="col-span-4" />
+          {/* <GenerateRecipes className="col-span-4" /> */}
           <MealPlans className="col-span-8" />
           <ShoppingList className="col-span-4" />
         </section>

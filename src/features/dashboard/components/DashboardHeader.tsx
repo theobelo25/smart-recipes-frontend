@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader } from "@/src/shared/ui/card";
 import { Separator } from "@/src/shared/ui/separator";
 import Link from "next/link";
 import { DashboardNavigation } from "./DashboardNavigation";
+import { Button } from "@/src/shared/ui/button";
 
 export function DashboardHeader() {
   const user = useAuthStore((s) => s.user);
@@ -27,6 +28,7 @@ export function DashboardHeader() {
               <Link href={"/dashboard/change-password"}>Change Password</Link>
             </li>
           </ul>
+          <Link href={"/generate"}>Generate Recipes</Link>
         </CardContent>
       </Card>
       <DashboardNavigation />

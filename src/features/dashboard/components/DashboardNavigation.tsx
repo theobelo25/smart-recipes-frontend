@@ -23,7 +23,7 @@ export function DashboardNavigation() {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
-            <Link href="/dashboard">Pantry</Link>
+            <Link href="/pantry">Pantry</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>

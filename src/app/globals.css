@@ -16,6 +16,7 @@
     --brand-dark: 95 168 131; /* #5FA883 */
 
     /* Surfaces (tuned to layer nicely above #E6F2EA) */
+    --background: 230 242 234;
     --bg: 230 242 234; /* #E6F2EA */
     --card: 242 250 245; /* #F2FAF5 (lighter than bg for cards) */
     --section: 222 238 229; /* #DEEEE5 (slightly deeper than bg for sections) */
@@ -45,6 +46,7 @@
     --brand-dark: 112 184 149; /* #70B895 */
 
     /* Surfaces (dark pastel green, with clear elevation steps) */
+    --background: 22 34 29; /* #16221D */
     --bg: 22 34 29; /* #16221D */
     --card: 28 44 37; /* #1C2C25 */
     --section: 35 56 47; /* #23382F */
@@ -69,7 +71,7 @@
     @apply border-border outline-ring/50;
   }
 
-  /* IMPORTANT: no <alpha-value> here */
+  /* IMPORTANT: no 100 here */
   body {
     background-color: rgb(var(--bg));
     color: rgb(var(--text));
@@ -86,33 +88,33 @@
   --font-mono: var(--font-geist-mono);
 
   /* shadcn utilities */
-  --color-background: rgb(var(--bg) / <alpha-value>);
-  --color-foreground: rgb(var(--text) / <alpha-value>);
+  --color-background: rgb(var(--bg) / 100);
+  --color-foreground: rgb(var(--text) / 100);
 
-  --color-card: rgb(var(--card) / <alpha-value>);
-  --color-card-foreground: rgb(var(--text) / <alpha-value>);
+  --color-card: rgb(var(--card) / 100);
+  --color-card-foreground: rgb(var(--text) / 100);
 
-  --color-popover: rgb(var(--card) / <alpha-value>);
-  --color-popover-foreground: rgb(var(--text) / <alpha-value>);
+  --color-popover: rgb(var(--card) / 100);
+  --color-popover-foreground: rgb(var(--text) / 100);
 
-  --color-primary: rgb(var(--brand) / <alpha-value>);
-  --color-primary-foreground: rgb(var(--text) / <alpha-value>);
+  --color-primary: rgb(var(--brand) / 100);
+  --color-primary-foreground: rgb(var(--text) / 100);
 
-  --color-secondary: rgb(var(--section) / <alpha-value>);
-  --color-secondary-foreground: rgb(var(--text) / <alpha-value>);
+  --color-secondary: rgb(var(--section) / 100);
+  --color-secondary-foreground: rgb(var(--text) / 100);
 
-  --color-muted: rgb(var(--section) / <alpha-value>);
-  --color-muted-foreground: rgb(var(--text-muted) / <alpha-value>);
+  --color-muted: rgb(var(--section) / 100);
+  --color-muted-foreground: rgb(var(--text-muted) / 100);
 
-  --color-accent: rgb(var(--section) / <alpha-value>);
-  --color-accent-foreground: rgb(var(--text) / <alpha-value>);
+  --color-accent: rgb(var(--section) / 100);
+  --color-accent-foreground: rgb(var(--text) / 100);
 
-  --color-destructive: rgb(var(--error) / <alpha-value>);
-  --color-destructive-foreground: rgb(var(--text) / <alpha-value>);
+  --color-destructive: rgb(var(--error) / 100);
+  --color-destructive-foreground: rgb(var(--text) / 100);
 
-  --color-border: rgb(var(--border) / <alpha-value>);
-  --color-input: rgb(var(--border) / <alpha-value>);
-  --color-ring: rgb(var(--ring) / <alpha-value>);
+  --color-border: rgb(var(--border) / 100);
+  --color-input: rgb(var(--border) / 100);
+  --color-ring: rgb(var(--ring) / 100);
 
   /* Radius */
   --radius-sm: calc(var(--radius) - 4px);
@@ -124,11 +126,11 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   /* Optional convenience utilities */
-  --color-brand: rgb(var(--brand) / <alpha-value>);
-  --color-brand-hover: rgb(var(--brand-hover) / <alpha-value>);
-  --color-text-primary: rgb(var(--text) / <alpha-value>);
-  --color-text-secondary: rgb(var(--text-secondary) / <alpha-value>);
-  --color-text-muted: rgb(var(--text-muted) / <alpha-value>);
+  --color-brand: rgb(var(--brand) / 100);
+  --color-brand-hover: rgb(var(--brand-hover) / 100);
+  --color-text-primary: rgb(var(--text) / 100);
+  --color-text-secondary: rgb(var(--text-secondary) / 100);
+  --color-text-muted: rgb(var(--text-muted) / 100);
 }
 
 /* Optional: if you use Typography's prose classes, keep it from forcing pure white */
