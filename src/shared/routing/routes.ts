@@ -15,6 +15,27 @@ export const ROUTES = [
     showInHeader: true,
   },
   {
+    id: "pantry",
+    path: "/pantry",
+    label: "Pantry",
+    protected: true,
+    showInHeader: false,
+  },
+  {
+    id: "generate",
+    path: "/generate",
+    label: "Generate",
+    protected: true,
+    showInHeader: false,
+  },
+  {
+    id: "saved",
+    path: "/saved",
+    label: "Saved Recipes",
+    protected: true,
+    showInHeader: false,
+  },
+  {
     id: "signin",
     path: "/signin",
     label: "Signin",

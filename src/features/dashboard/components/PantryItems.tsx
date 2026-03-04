@@ -27,12 +27,14 @@ export function PantryItems({ className }: { className: string }) {
         <AddPantryItemDialog />
       </CardHeader>
       <CardContent>
-        {recentPantryItems.length && (
+        {recentPantryItems.length > 0 ? (
           <PantryItemTable pantryItems={recentPantryItems} />
+        ) : (
+          <p>Add some items to your pantry to get started!</p>
         )}
       </CardContent>
       <CardFooter className="justify-end">
-        <Link href={"/pantry"}>View all</Link>
+        {recentPantryItems.length > 0 && <Link href={"/pantry"}>View all</Link>}
       </CardFooter>
     </Card>
   );

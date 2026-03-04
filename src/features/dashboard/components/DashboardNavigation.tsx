@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export function DashboardNavigation() {
   return (
-    <NavigationMenu className="w-full">
+    <NavigationMenu className="w-full mt-4">
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
@@ -18,22 +18,12 @@ export function DashboardNavigation() {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
-            <Link href="/dashboard">Saved</Link>
+            <Link href="/saved">Saved Recipes</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
             <Link href="/pantry">Pantry</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/dashboard">Meals</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/dashboard">Shopping</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>

@@ -1,10 +1,4 @@
-import {
-  GenerateRecipes,
-  MealPlans,
-  PantryItems,
-  SavedRecipes,
-  ShoppingList,
-} from "@/src/features/dashboard/components";
+import { PantryItems, SavedRecipes } from "@/src/features/dashboard/components";
 
 export default function DashboardPage() {
   return (
@@ -13,9 +7,6 @@ export default function DashboardPage() {
         <section className="grid grid-cols-12 gap-8 w-full">
           <SavedRecipes className="col-span-4" />
           <PantryItems className="col-span-4" />
-          {/* <GenerateRecipes className="col-span-4" /> */}
-          <MealPlans className="col-span-8" />
-          <ShoppingList className="col-span-4" />
         </section>
       </main>
     </div>
