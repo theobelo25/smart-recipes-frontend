@@ -24,7 +24,7 @@ import { changePassword } from "../api/dashboard.api";
 
 export function ChangePasswordForm() {
   const router = useRouter();
-  const { accessToken, setUser } = useAuthStore((s) => s);
+  const { setUser } = useAuthStore((s) => s);
 
   const form = useForm<ChangePasswordDto>({
     resolver: zodResolver(changePasswordSchema),
@@ -37,7 +37,7 @@ export function ChangePasswordForm() {
 
   async function onSubmit(data: ChangePasswordDto) {
     try {
-      const response = await changePassword(data, accessToken);
+      const response = await changePassword(data);
 
       setUser(response.data);
 
