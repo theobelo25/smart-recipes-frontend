@@ -16,13 +16,11 @@ export function proxy(request: NextRequest) {
 
   if (!isProtectedRoute && !isAuthRoute) return NextResponse.next();
 
+  // Refresh token is set by the API (different origin), so it is not in
+  // request.cookies here. Let the client handle auth: AuthInitializer will
+  // call /auth/refresh with credentials; protected layout redirects to signin
+  // if there is no accessToken after init.
   const refreshToken = request.cookies.get("refreshToken");
-
-  if (isProtectedRoute && !refreshToken) {
-    const signinUrl = new URL(ROUTE_BY_ID.signin.path, request.url);
-    signinUrl.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(signinUrl);
-  }
 
   if (isAuthRoute && refreshToken) {
     const redirectParam = request.nextUrl.searchParams.get("redirect");
