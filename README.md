@@ -34,3 +34,10 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Deploy on Dokploy (Nixpacks)
+
+1. **Node version** – The repo pins Node 24 via `engines.node` and `.nvmrc`; Nixpacks will use it automatically.
+2. **Build env** – Set **`NEXT_PUBLIC_API_URL`** in Dokploy for this app to your **backend’s public URL** (e.g. `https://api.yourdomain.com`). This is inlined at build time, so it must be set in the build environment.
+3. **Port** – Next.js `start` uses `PORT` if set; Dokploy usually provides it. No change needed unless your platform expects a specific port.
+4. Copy `.env.example` to `.env` locally; in Dokploy, configure the variable in the project UI instead of committing secrets.
