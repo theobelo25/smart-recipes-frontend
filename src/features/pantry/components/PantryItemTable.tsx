@@ -11,6 +11,7 @@ import { PantryItem } from "../types";
 import { Button } from "@/src/shared/ui/button";
 import { usePantryStore } from "../stores/pantry.store";
 import { Checkbox } from "@/src/shared/ui/checkbox";
+import { Trash2 } from "lucide-react";
 
 type BaseProps = {
   pantryItems: PantryItem[];
@@ -73,8 +74,9 @@ export function PantryItemTable(props: PantryItemTableProps) {
                   type="button"
                   variant={"outline"}
                   onClick={() => removePantryItem(pi.id)}
+                  aria-label="Remove pantry item"
                 >
-                  -
+                  <Trash2 className="size-4" aria-hidden />
                 </Button>
               </TableCell>
             )}

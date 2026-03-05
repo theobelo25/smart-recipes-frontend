@@ -22,6 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PantryItemTable } from "@/src/features/pantry/components/PantryItemTable";
+import { LoadingSpinner } from "@/src/shared/components/LoadingSpinner";
 
 export default function GenerateRecipesPage() {
   const router = useRouter();
@@ -32,6 +33,7 @@ export default function GenerateRecipesPage() {
   const generateRecipe = useRecipeStore((s) => s.generateRecipe);
   const error = useRecipeStore((s) => s.error);
   const generatedRecipe = useRecipeStore((s) => s.generatedRecipe);
+  const isGenerating = useRecipeStore((s) => s.isGenerating);
   const saveGeneratedRecipe = useRecipeStore((s) => s.saveGeneratedRecipe);
 
   const allSelected = selectedIds.length === pantryItems.length;
@@ -64,73 +66,86 @@ export default function GenerateRecipesPage() {
   };
 
   return (
-    <section className="px-64 grid grid-cols-2 gap-8">
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <h3>Your Pantry</h3>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <PantryItemTable
-            pantryItems={pantryItems}
-            isGeneratePage={true}
-            selectedIds={selectedIds}
-            setSelectedIds={setSelectedIds}
-          />
-        </CardContent>
-        <CardFooter>
-          <FieldGroup>
-            <Field orientation="horizontal">
-              <Checkbox
-                checked={selectAllState}
-                onCheckedChange={(value) => {
-                  if (value === true) {
-                    setSelectedIds(pantryItems.map((item) => item.id));
-                  } else {
-                    setSelectedIds([]);
-                  }
-                }}
+    <div className="flex flex-col items-center w-full bg-bg">
+      <main className="flex w-full flex-col items-center justify-center px-6 sm:px-8 md:px-10 xl:px-24 sm:items-start">
+        <section className="grid grid-cols-1 gap-8 w-full xl:grid-cols-2">
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                <h3>Your Pantry</h3>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="overflow-x-auto">
+              <PantryItemTable
+                pantryItems={pantryItems}
+                isGeneratePage={true}
+                selectedIds={selectedIds}
+                setSelectedIds={setSelectedIds}
               />
-              <FieldContent>
-                <FieldLabel>Use full pantry</FieldLabel>
-                <FieldDescription>
-                  Include every item in your pantry when generating your recipe.
-                </FieldDescription>
-              </FieldContent>
-            </Field>
-          </FieldGroup>
-        </CardFooter>
-      </Card>
-      <Card>
-        <CardHeader className="flex justify-between items-center">
-          <CardTitle>Generate a recipe!</CardTitle>
-          <Button variant={"default"} onClick={handleGenerateClick}>
-            Generate Recipe!
-          </Button>
-        </CardHeader>
-        <CardContent>
-          {error.length ? (
-            <p>{error}</p>
-          ) : generatedRecipe ? (
-            <GeneratedRecipe recipe={generatedRecipe} />
-          ) : (
-            ""
-          )}
-        </CardContent>
-        <CardFooter className="flex justify-between items-center">
-          {error.length ? (
-            <p>Opps! Try again!</p>
-          ) : generatedRecipe ? (
-            <p>Enjoy!</p>
-          ) : (
-            "Click to generate your recipe!"
-          )}
-          <Button variant={"outline"} type="button" onClick={handleSaveClick}>
-            Save Recipe
-          </Button>
-        </CardFooter>
-      </Card>
-    </section>
+            </CardContent>
+            <CardFooter>
+              <FieldGroup>
+                <Field orientation="horizontal">
+                  <Checkbox
+                    checked={selectAllState}
+                    onCheckedChange={(value) => {
+                      if (value === true) {
+                        setSelectedIds(pantryItems.map((item) => item.id));
+                      } else {
+                        setSelectedIds([]);
+                      }
+                    }}
+                  />
+                  <FieldContent>
+                    <FieldLabel>Use Full Pantry</FieldLabel>
+                    <FieldDescription>
+                      Include every item in your pantry when generating your
+                      recipe.
+                    </FieldDescription>
+                  </FieldContent>
+                </Field>
+              </FieldGroup>
+            </CardFooter>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-col gap-4 items-start sm:flex-row sm:justify-between sm:items-center">
+              <CardTitle>Generate a recipe!</CardTitle>
+              <Button variant={"default"} onClick={handleGenerateClick}>
+                {generatedRecipe ? "Generate New Recipe" : "Generate Recipe!"}
+              </Button>
+            </CardHeader>
+            <CardContent>
+              {isGenerating ? (
+                <div className="flex justify-center items-center min-h-[200px]">
+                  <LoadingSpinner inline />
+                </div>
+              ) : error.length ? (
+                <p>{error}</p>
+              ) : generatedRecipe ? (
+                <GeneratedRecipe recipe={generatedRecipe} />
+              ) : null}
+            </CardContent>
+            <CardFooter className="flex flex-col gap-4 items-stretch sm:flex-row sm:justify-between sm:items-center">
+              {error.length ? (
+                <p>Opps! Try again!</p>
+              ) : generatedRecipe ? (
+                <p>Enjoy!</p>
+              ) : (
+                "Click to generate your recipe!"
+              )}
+              {generatedRecipe && (
+                <Button
+                  variant={"outline"}
+                  type="button"
+                  onClick={handleSaveClick}
+                >
+                  Save Recipe
+                </Button>
+              )}
+            </CardFooter>
+          </Card>
+        </section>
+      </main>
+    </div>
   );
 }

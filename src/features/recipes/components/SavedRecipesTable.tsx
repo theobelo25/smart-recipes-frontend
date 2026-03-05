@@ -12,6 +12,7 @@ import { Recipe } from "../types";
 import { Button } from "@/src/shared/ui/button";
 import { useRecipeStore } from "../stores/recipes.store";
 import { useRouter } from "next/navigation";
+import { Pencil, Trash2 } from "lucide-react";
 
 export function SavedRecipesTable({
   recipes,
@@ -30,12 +31,19 @@ export function SavedRecipesTable({
     removeRecipe(id);
   };
 
+  const handleEditClick = (e: React.MouseEvent<HTMLButtonElement>, slug: string) => {
+    e.stopPropagation();
+    router.push(`/saved/${slug}`);
+  };
+
   return (
     <Table className="w-full">
       <TableHeader>
         <TableRow>
           <TableHead className="w-25">Name</TableHead>
-          {isRecipePage && <TableHead>Description</TableHead>}
+          {isRecipePage && (
+            <TableHead className="hidden md:table-cell">Description</TableHead>
+          )}
           {isRecipePage && (
             <TableHead className="w-20 text-center">Actions</TableHead>
           )}
@@ -45,21 +53,37 @@ export function SavedRecipesTable({
         {recipes?.map((pi) => (
           <TableRow
             key={pi.id}
+            className="cursor-pointer"
             onClick={() => {
               router.push(`/saved/${pi.slug}`);
             }}
           >
             <TableCell className="font-medium">{pi.title}</TableCell>
-            {isRecipePage && <TableCell>{pi.description}</TableCell>}
+            {isRecipePage && (
+              <TableCell className="hidden max-w-md whitespace-normal md:table-cell">
+                {pi.description}
+              </TableCell>
+            )}
             {isRecipePage && (
               <TableCell className="w-20 text-center">
-                <Button
-                  type="button"
-                  variant={"outline"}
-                  onClick={(e) => handleDeleteClick(e, pi.id)}
-                >
-                  -
-                </Button>
+                <div className="flex items-center justify-center gap-1">
+                  <Button
+                    type="button"
+                    variant={"outline"}
+                    onClick={(e) => handleEditClick(e, pi.slug)}
+                    aria-label="Edit recipe"
+                  >
+                    <Pencil className="size-4" aria-hidden />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={"outline"}
+                    onClick={(e) => handleDeleteClick(e, pi.id)}
+                    aria-label="Remove recipe"
+                  >
+                    <Trash2 className="size-4" aria-hidden />
+                  </Button>
+                </div>
               </TableCell>
             )}
           </TableRow>

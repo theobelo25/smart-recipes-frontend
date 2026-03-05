@@ -20,6 +20,7 @@ interface RecipeState {
   generatedRecipe: GeneratedRecipe | null;
   activeRecipe: Recipe | null;
   isLoading: boolean;
+  isGenerating: boolean;
   error: string;
 
   generateRecipe: (generateRecipeDto: GenerateRecipeDto) => void;
@@ -35,10 +36,11 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
   generatedRecipe: null,
   activeRecipe: null,
   isLoading: false,
+  isGenerating: false,
   error: "",
 
   generateRecipe: async (generateRecipeDto) => {
-    set({ error: "" });
+    set({ error: "", isGenerating: true });
 
     try {
       const data = await generateRecipe(generateRecipeDto);
@@ -46,6 +48,8 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
     } catch (error: unknown) {
       console.log(error);
       set({ error: "Unable to generate recipe..." });
+    } finally {
+      set({ isGenerating: false });
     }
   },
   saveGeneratedRecipe: async (generatedRecipe): Promise<Recipe | null> => {

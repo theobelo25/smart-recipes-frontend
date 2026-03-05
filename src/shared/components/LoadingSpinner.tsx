@@ -1,19 +1,31 @@
 import { Bars } from "react-loader-spinner";
 
-export function LoadingSpinner() {
+export function LoadingSpinner({
+  inline = false,
+}: {
+  inline?: boolean;
+} = {}) {
   return (
     <Bars
-      height="80"
-      width="80"
+      height={inline ? 48 : 80}
+      width={inline ? 48 : 80}
       color="#4fa94d"
       ariaLabel="bars-loading"
-      wrapperStyle={{
-        width: "100%",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
+      wrapperStyle={
+        inline
+          ? {
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }
+          : {
+              width: "100%",
+              height: "100vh",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }
+      }
       wrapperClass=""
       visible={true}
     />

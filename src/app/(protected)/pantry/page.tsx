@@ -13,16 +13,20 @@ export default function PantryPage() {
     hydratePantryItems();
   }, [hydratePantryItems]);
   return (
-    <section className="px-64">
-      <Card>
-        <CardHeader className="flex justify-between h-14 items-center">
-          <CardTitle>Pantry</CardTitle>
-          <AddPantryItemDialog />
-        </CardHeader>
-        <CardContent>
-          <PantryItemTable pantryItems={pantryItems} isPantryPage={true} />
-        </CardContent>
-      </Card>
-    </section>
+    <div className="flex flex-col items-center w-full bg-bg">
+      <main className="flex w-full flex-col items-center justify-center px-6 sm:px-8 md:px-10 xl:px-24 sm:items-start">
+        <section className="grid grid-cols-1 gap-8 w-full">
+          <Card>
+            <CardHeader className="flex flex-col gap-4 items-start sm:flex-row sm:justify-between sm:items-center min-h-14">
+              <CardTitle>Pantry</CardTitle>
+              <AddPantryItemDialog />
+            </CardHeader>
+            <CardContent className="overflow-x-auto">
+              <PantryItemTable pantryItems={pantryItems} isPantryPage={true} />
+            </CardContent>
+          </Card>
+        </section>
+      </main>
+    </div>
   );
 }

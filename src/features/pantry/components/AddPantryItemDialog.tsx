@@ -15,7 +15,7 @@ export default function AddPantryItemDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">+</Button>
+        <Button variant="outline">Add Pantry Item</Button>
       </DialogTrigger>
       <DialogContent className="bg-background">
         <DialogHeader>

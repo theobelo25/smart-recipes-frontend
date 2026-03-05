@@ -10,14 +10,13 @@
 ========================= */
 @layer base {
   :root {
-    /* Brand (slightly deepened so it doesn’t wash out on the greener bg) */
+    /* Brand (slightly deepened so it doesn't wash out on the greener bg) */
     --brand: 152 209 179; /* #98D1B3 */
     --brand-hover: 130 198 161; /* #82C6A1 */
     --brand-dark: 95 168 131; /* #5FA883 */
 
     /* Surfaces (tuned to layer nicely above #E6F2EA) */
-    --background: 230 242 234;
-    --bg: 230 242 234; /* #E6F2EA */
+    --background: 230 242 234; /* #E6F2EA */
     --card: 242 250 245; /* #F2FAF5 (lighter than bg for cards) */
     --section: 222 238 229; /* #DEEEE5 (slightly deeper than bg for sections) */
 
@@ -31,10 +30,29 @@
     --warning: 242 203 150; /* #F2CB96 */
     --error: 237 160 160; /* #EDA0A0 */
     --info: 179 221 245; /* #B3DDF5 */
+    /* High-contrast text on destructive (red) backgrounds */
+    --destructive-foreground: 255 255 255;
 
-    /* UI (a bit more neutral so borders don’t look “green tinted”) */
+    /* UI (a bit more neutral so borders don't look "green tinted") */
     --border: 200 214 205; /* #C8D6CD */
     --ring: 152 209 179; /* matches --brand */
+
+    /* Chart (for shadcn Chart component; theme-aligned palette) */
+    --chart-1: 152 209 179; /* brand */
+    --chart-2: 140 214 176; /* success */
+    --chart-3: 242 203 150; /* warning */
+    --chart-4: 179 221 245; /* info */
+    --chart-5: 95 168 131;  /* brand-dark */
+
+    /* Sidebar (for shadcn Sidebar component) */
+    --sidebar: 222 238 229; /* section */
+    --sidebar-foreground: 47 58 47; /* text */
+    --sidebar-primary: 152 209 179; /* brand */
+    --sidebar-primary-foreground: 47 58 47; /* text */
+    --sidebar-accent: 222 238 229; /* section */
+    --sidebar-accent-foreground: 47 58 47; /* text */
+    --sidebar-border: 200 214 205; /* border */
+    --sidebar-ring: 152 209 179; /* ring */
 
     --radius: 12px;
   }
@@ -47,7 +65,6 @@
 
     /* Surfaces (dark pastel green, with clear elevation steps) */
     --background: 22 34 29; /* #16221D */
-    --bg: 22 34 29; /* #16221D */
     --card: 28 44 37; /* #1C2C25 */
     --section: 35 56 47; /* #23382F */
 
@@ -61,60 +78,94 @@
     --warning: 224 180 123; /* #E0B47B */
     --error: 222 129 129; /* #DE8181 */
     --info: 148 196 224; /* #94C4E0 */
+    --destructive-foreground: 255 255 255;
 
     /* UI (subtle borders, brand ring) */
     --border: 62 86 74; /* #3E564A */
     --ring: 170 223 198; /* matches --brand */
+
+    /* Chart (dark) */
+    --chart-1: 170 223 198;
+    --chart-2: 123 201 164;
+    --chart-3: 224 180 123;
+    --chart-4: 148 196 224;
+    --chart-5: 112 184 149;
+
+    /* Sidebar (dark) */
+    --sidebar: 35 56 47;
+    --sidebar-foreground: 231 242 235;
+    --sidebar-primary: 170 223 198;
+    --sidebar-primary-foreground: 22 34 29;
+    --sidebar-accent: 35 56 47;
+    --sidebar-accent-foreground: 231 242 235;
+    --sidebar-border: 62 86 74;
+    --sidebar-ring: 170 223 198;
   }
 
   * {
     @apply border-border outline-ring/50;
   }
 
-  /* IMPORTANT: no 100 here */
   body {
-    background-color: rgb(var(--bg));
+    background-color: rgb(var(--background));
     color: rgb(var(--text));
   }
 }
 
 /* =========================
    2) Tailwind v4 theme tokens
-   (this is where <alpha-value> is valid)
+   <alpha-value> enables opacity modifiers (e.g. bg-primary/80)
 ========================= */
 @theme inline {
   /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* shadcn utilities */
-  --color-background: rgb(var(--bg) / 100);
-  --color-foreground: rgb(var(--text) / 100);
+  /* shadcn utilities (with alpha support) */
+  --color-background: rgb(var(--background) / <alpha-value>);
+  --color-foreground: rgb(var(--text) / <alpha-value>);
 
-  --color-card: rgb(var(--card) / 100);
-  --color-card-foreground: rgb(var(--text) / 100);
+  --color-card: rgb(var(--card) / <alpha-value>);
+  --color-card-foreground: rgb(var(--text) / <alpha-value>);
 
-  --color-popover: rgb(var(--card) / 100);
-  --color-popover-foreground: rgb(var(--text) / 100);
+  --color-popover: rgb(var(--card) / <alpha-value>);
+  --color-popover-foreground: rgb(var(--text) / <alpha-value>);
 
-  --color-primary: rgb(var(--brand) / 100);
-  --color-primary-foreground: rgb(var(--text) / 100);
+  --color-primary: rgb(var(--brand) / <alpha-value>);
+  --color-primary-foreground: rgb(var(--text) / <alpha-value>);
 
-  --color-secondary: rgb(var(--section) / 100);
-  --color-secondary-foreground: rgb(var(--text) / 100);
+  --color-secondary: rgb(var(--section) / <alpha-value>);
+  --color-secondary-foreground: rgb(var(--text) / <alpha-value>);
 
-  --color-muted: rgb(var(--section) / 100);
-  --color-muted-foreground: rgb(var(--text-muted) / 100);
+  --color-muted: rgb(var(--section) / <alpha-value>);
+  --color-muted-foreground: rgb(var(--text-muted) / <alpha-value>);
 
-  --color-accent: rgb(var(--section) / 100);
-  --color-accent-foreground: rgb(var(--text) / 100);
+  --color-accent: rgb(var(--section) / <alpha-value>);
+  --color-accent-foreground: rgb(var(--text) / <alpha-value>);
 
-  --color-destructive: rgb(var(--error) / 100);
-  --color-destructive-foreground: rgb(var(--text) / 100);
+  --color-destructive: rgb(var(--error) / <alpha-value>);
+  --color-destructive-foreground: rgb(var(--destructive-foreground) / <alpha-value>);
 
-  --color-border: rgb(var(--border) / 100);
-  --color-input: rgb(var(--border) / 100);
-  --color-ring: rgb(var(--ring) / 100);
+  --color-border: rgb(var(--border) / <alpha-value>);
+  --color-input: rgb(var(--border) / <alpha-value>);
+  --color-ring: rgb(var(--ring) / <alpha-value>);
+
+  /* Chart (shadcn Chart component) */
+  --color-chart-1: rgb(var(--chart-1) / <alpha-value>);
+  --color-chart-2: rgb(var(--chart-2) / <alpha-value>);
+  --color-chart-3: rgb(var(--chart-3) / <alpha-value>);
+  --color-chart-4: rgb(var(--chart-4) / <alpha-value>);
+  --color-chart-5: rgb(var(--chart-5) / <alpha-value>);
+
+  /* Sidebar (shadcn Sidebar component) */
+  --color-sidebar: rgb(var(--sidebar) / <alpha-value>);
+  --color-sidebar-foreground: rgb(var(--sidebar-foreground) / <alpha-value>);
+  --color-sidebar-primary: rgb(var(--sidebar-primary) / <alpha-value>);
+  --color-sidebar-primary-foreground: rgb(var(--sidebar-primary-foreground) / <alpha-value>);
+  --color-sidebar-accent: rgb(var(--sidebar-accent) / <alpha-value>);
+  --color-sidebar-accent-foreground: rgb(var(--sidebar-accent-foreground) / <alpha-value>);
+  --color-sidebar-border: rgb(var(--sidebar-border) / <alpha-value>);
+  --color-sidebar-ring: rgb(var(--sidebar-ring) / <alpha-value>);
 
   /* Radius */
   --radius-sm: calc(var(--radius) - 4px);
@@ -126,11 +177,11 @@
   --radius-4xl: calc(var(--radius) + 16px);
 
   /* Optional convenience utilities */
-  --color-brand: rgb(var(--brand) / 100);
-  --color-brand-hover: rgb(var(--brand-hover) / 100);
-  --color-text-primary: rgb(var(--text) / 100);
-  --color-text-secondary: rgb(var(--text-secondary) / 100);
-  --color-text-muted: rgb(var(--text-muted) / 100);
+  --color-brand: rgb(var(--brand) / <alpha-value>);
+  --color-brand-hover: rgb(var(--brand-hover) / <alpha-value>);
+  --color-text-primary: rgb(var(--text) / <alpha-value>);
+  --color-text-secondary: rgb(var(--text-secondary) / <alpha-value>);
+  --color-text-muted: rgb(var(--text-muted) / <alpha-value>);
 }
 
 /* Optional: if you use Typography's prose classes, keep it from forcing pure white */

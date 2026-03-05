@@ -5,6 +5,7 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
+  CardTitle,
 } from "@/src/shared/ui/card";
 import { useRecipeStore } from "../../recipes/stores/recipes.store";
 import { useEffect } from "react";
@@ -19,9 +20,9 @@ export function SavedRecipes({ className }: { className: string }) {
     hydrateRecentRecipes();
   }, [hydrateRecentRecipes]);
   return (
-    <Card className={cn(className, "")}>
-      <CardHeader>
-        <h2>Saved Recipes</h2>
+    <Card className={cn(className, "justify-start gap-2")}>
+      <CardHeader className="flex justify-between h-12 items-center">
+        <CardTitle>Saved Recipes</CardTitle>
       </CardHeader>
       <CardContent>
         {recentRecipes.length > 0 ? (
