@@ -31,7 +31,6 @@ export default function GenerateRecipesPage() {
   const pantryItems = usePantryStore((s) => s.pantryItems);
   const hydratePantryItems = usePantryStore((s) => s.hydrate);
   const generateRecipe = useRecipeStore((s) => s.generateRecipe);
-  const error = useRecipeStore((s) => s.error);
   const generatedRecipe = useRecipeStore((s) => s.generatedRecipe);
   const isGenerating = useRecipeStore((s) => s.isGenerating);
   const saveGeneratedRecipe = useRecipeStore((s) => s.saveGeneratedRecipe);
@@ -119,16 +118,12 @@ export default function GenerateRecipesPage() {
                 <div className="flex justify-center items-center min-h-[200px]">
                   <LoadingSpinner inline />
                 </div>
-              ) : error.length ? (
-                <p>{error}</p>
               ) : generatedRecipe ? (
                 <GeneratedRecipe recipe={generatedRecipe} />
               ) : null}
             </CardContent>
             <CardFooter className="flex flex-col gap-4 items-stretch sm:flex-row sm:justify-between sm:items-center">
-              {error.length ? (
-                <p>Opps! Try again!</p>
-              ) : generatedRecipe ? (
+              {generatedRecipe ? (
                 <p>Enjoy!</p>
               ) : (
                 "Click to generate your recipe!"

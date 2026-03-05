@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/shared/ui/card";
+import { Button } from "@/src/shared/ui/button";
 import { useRecipeStore } from "../../recipes/stores/recipes.store";
 import { useEffect } from "react";
 import Link from "next/link";
@@ -21,8 +22,11 @@ export function SavedRecipes({ className }: { className: string }) {
   }, [hydrateRecentRecipes]);
   return (
     <Card className={cn(className, "justify-start gap-2")}>
-      <CardHeader className="flex justify-between h-12 items-center">
+      <CardHeader className="flex flex-col gap-4 items-start sm:flex-row sm:justify-between sm:items-center min-h-14">
         <CardTitle>Saved Recipes</CardTitle>
+        <Button variant="outline" asChild>
+          <Link href="/generate">Generate Recipe</Link>
+        </Button>
       </CardHeader>
       <CardContent>
         {recentRecipes.length > 0 ? (

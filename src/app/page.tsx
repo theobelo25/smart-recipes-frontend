@@ -1,8 +1,13 @@
+"use client";
+
 import Logo from "../shared/components/Logo";
 import Link from "next/link";
 import { Button } from "../shared/ui/button";
+import { useAuthStore } from "@/src/features/auth";
 
 export default function Home() {
+  const isLoggedIn = useAuthStore((s) => !!s.accessToken);
+
   return (
     <div className="flex flex-col items-center w-full min-h-screen bg-bg">
       <main className="flex min-h-screen w-full flex-col items-center justify-center gap-12 py-16 px-6 sm:py-24 sm:px-8 md:py-28 md:px-10 xl:flex-row xl:items-center xl:gap-16 xl:py-32 xl:px-16">
@@ -19,12 +24,20 @@ export default function Home() {
             without the stress of planning.
           </p>
           <div className="flex flex-row justify-center gap-6 sm:gap-8 xl:justify-end">
-            <Button className="text-xl py-5 px-6" variant={"outline"} asChild>
-              <Link href={"/signin"}>Signin</Link>
-            </Button>
-            <Button className="text-xl py-5 px-6" variant={"outline"} asChild>
-              <Link href={"/signup"}>Signup</Link>
-            </Button>
+            {isLoggedIn ? (
+              <Button className="text-xl py-5 px-6" variant={"outline"} asChild>
+                <Link href={"/dashboard"}>Get started</Link>
+              </Button>
+            ) : (
+              <>
+                <Button className="text-xl py-5 px-6" variant={"outline"} asChild>
+                  <Link href={"/signin"}>Signin</Link>
+                </Button>
+                <Button className="text-xl py-5 px-6" variant={"outline"} asChild>
+                  <Link href={"/signup"}>Signup</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </main>

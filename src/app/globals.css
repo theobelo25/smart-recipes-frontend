@@ -122,13 +122,17 @@
   --font-mono: var(--font-geist-mono);
 
   /* shadcn utilities (with alpha support) */
-  --color-background: rgb(var(--background) / <alpha-value>);
+  /* Surface colors: opaque so dialogs, cards, popovers are never transparent */
+  --color-background: rgb(var(--background));
   --color-foreground: rgb(var(--text) / <alpha-value>);
 
-  --color-card: rgb(var(--card) / <alpha-value>);
+  /* bg-bg utility (used by dialog, sheet, pages) */
+  --color-bg: rgb(var(--background));
+
+  --color-card: rgb(var(--card));
   --color-card-foreground: rgb(var(--text) / <alpha-value>);
 
-  --color-popover: rgb(var(--card) / <alpha-value>);
+  --color-popover: rgb(var(--card));
   --color-popover-foreground: rgb(var(--text) / <alpha-value>);
 
   --color-primary: rgb(var(--brand) / <alpha-value>);

@@ -21,9 +21,9 @@ interface RecipeState {
   activeRecipe: Recipe | null;
   isLoading: boolean;
   isGenerating: boolean;
-  error: string;
 
   generateRecipe: (generateRecipeDto: GenerateRecipeDto) => void;
+  updateGeneratedRecipeTitle: (title: string) => void;
   saveGeneratedRecipe: (recipe: GeneratedRecipe) => Promise<Recipe | null>;
   hydrate: () => void;
   hydrateRecent: () => void;
@@ -37,54 +37,52 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
   activeRecipe: null,
   isLoading: false,
   isGenerating: false,
-  error: "",
 
   generateRecipe: async (generateRecipeDto) => {
-    set({ error: "", isGenerating: true });
+    set({ isGenerating: true });
 
     try {
       const data = await generateRecipe(generateRecipeDto);
       set({ generatedRecipe: data });
-    } catch (error: unknown) {
-      console.log(error);
-      set({ error: "Unable to generate recipe..." });
+    } catch {
+      // Error shown via toast in axios interceptor
     } finally {
       set({ isGenerating: false });
     }
   },
+  updateGeneratedRecipeTitle: (title: string) => {
+    const current = get().generatedRecipe;
+    if (current) set({ generatedRecipe: { ...current, title } });
+  },
   saveGeneratedRecipe: async (generatedRecipe): Promise<Recipe | null> => {
-    set({ error: "" });
-
     try {
       const savedRecipe = await saveRecipe(generatedRecipe);
-      console.log(savedRecipe);
-
       return savedRecipe;
-    } catch (error: unknown) {
-      set({ error: "Unable to save recipe..." });
+    } catch {
+      // Error shown via toast in axios interceptor
       return null;
     }
   },
   hydrate: async () => {
-    set({ isLoading: true, error: "" });
+    set({ isLoading: true });
     try {
       const recipes = await getRecipes();
       set({ recipes });
     } catch (error) {
       console.error(error);
-      set({ error: "Failed to load recipes." });
+      // Error shown via toast in axios interceptor
     } finally {
       set({ isLoading: false });
     }
   },
   hydrateRecent: async () => {
-    set({ isLoading: true, error: "" });
+    set({ isLoading: true });
     try {
       const recentRecipes = await getRecentRecipes();
       set({ recentRecipes });
     } catch (error) {
       console.error(error);
-      set({ error: "Failed to load recipes." });
+      // Error shown via toast in axios interceptor
     } finally {
       set({ isLoading: false });
     }
@@ -99,7 +97,8 @@ export const useRecipeStore = create<RecipeState>((set, get) => ({
       await deleteRecipe(id);
     } catch (error) {
       console.error(error);
-      set({ recipes: prev, error: "Failed to delete recipe." });
+      set({ recipes: prev });
+      // Error shown via toast in axios interceptor
     }
   },
 }));

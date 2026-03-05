@@ -68,9 +68,10 @@ export function ChangePasswordForm() {
                   <Input
                     {...field}
                     id="oldPassword"
+                    type="password"
                     aria-invalid={fieldState.invalid}
                     placeholder="Old password"
-                    autoComplete="off"
+                    autoComplete="current-password"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -87,9 +88,10 @@ export function ChangePasswordForm() {
                   <Input
                     {...field}
                     id="newPassword"
+                    type="password"
                     aria-invalid={fieldState.invalid}
                     placeholder="New password"
-                    autoComplete="off"
+                    autoComplete="new-password"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -108,9 +110,10 @@ export function ChangePasswordForm() {
                   <Input
                     {...field}
                     id="confirmNewPassword"
+                    type="password"
                     aria-invalid={fieldState.invalid}
                     placeholder="Confirm new password"
-                    autoComplete="off"
+                    autoComplete="new-password"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />

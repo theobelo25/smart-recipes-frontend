@@ -1,10 +1,19 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import { showServerErrorToast } from "@/src/shared/lib/server-error-toast";
 import { useAuthStore } from "../store/auth.store";
 
 export const authAxios = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
+
+authAxios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    showServerErrorToast(error);
+    return Promise.reject(error);
+  },
+);
 
 /**
  * -----------------------------

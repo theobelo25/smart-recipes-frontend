@@ -53,7 +53,7 @@ export function EditProfileForm() {
           <h2>Edit Profile</h2>
         </CardTitle>
         <CardDescription>
-          Make changes to your display name and avatar!
+          Make changes to your display name!
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -14,9 +14,6 @@ export function DashboardHeader() {
       <Card>
         <CardHeader className="flex flex-col gap-4 items-start xl:flex-row xl:justify-between xl:items-center">
           <h2 className="w-full text-3xl sm:text-4xl xl:text-5xl">{`Welcome ${user?.username}!`}</h2>
-          <div className="aspect-square rounded-full shrink-0">
-            <p>Avatar</p>
-          </div>
         </CardHeader>
         <Separator className="bg-[rgb(230,242,234)] w-full" />
         <CardContent className="flex flex-col gap-4 xl:flex-row xl:justify-between">

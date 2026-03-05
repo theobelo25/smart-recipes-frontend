@@ -1,13 +1,85 @@
-import { GeneratedRecipe } from "../types";
+"use client";
 
-export default function GenereatedRecipe({
+import { useState } from "react";
+import { PencilIcon } from "lucide-react";
+import { Button } from "@/src/shared/ui/button";
+import { Input } from "@/src/shared/ui/input";
+import { useRecipeStore } from "../stores/recipes.store";
+import { GeneratedRecipe as GeneratedRecipeType } from "../types";
+
+export default function GeneratedRecipe({
   recipe,
 }: {
-  recipe: GeneratedRecipe;
+  recipe: GeneratedRecipeType;
 }) {
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [draftTitle, setDraftTitle] = useState(recipe.title);
+  const updateGeneratedRecipeTitle = useRecipeStore(
+    (s) => s.updateGeneratedRecipeTitle,
+  );
+
+  const handleStartEdit = () => {
+    setDraftTitle(recipe.title);
+    setIsEditingTitle(true);
+  };
+
+  const handleSaveTitle = () => {
+    const trimmed = draftTitle.trim();
+    if (trimmed) {
+      updateGeneratedRecipeTitle(trimmed);
+    }
+    setIsEditingTitle(false);
+  };
+
+  const handleCancelEdit = () => {
+    setDraftTitle(recipe.title);
+    setIsEditingTitle(false);
+  };
+
   return (
     <article>
-      <h3>{recipe.title}</h3>
+      <div className="flex flex-wrap items-center gap-2 mb-2">
+        {isEditingTitle ? (
+          <>
+            <Input
+              value={draftTitle}
+              onChange={(e) => setDraftTitle(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSaveTitle();
+                if (e.key === "Escape") handleCancelEdit();
+              }}
+              className="flex-1 min-w-[200px] text-lg font-semibold"
+              autoFocus
+              aria-label="Recipe name"
+            />
+            <Button type="button" size="sm" onClick={handleSaveTitle}>
+              Save
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={handleCancelEdit}
+            >
+              Cancel
+            </Button>
+          </>
+        ) : (
+          <>
+            <h3 className="text-xl font-semibold">{recipe.title}</h3>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleStartEdit}
+              aria-label="Edit recipe name"
+            >
+              <PencilIcon className="size-4" />
+              Edit name
+            </Button>
+          </>
+        )}
+      </div>
       <p>{`Prep Time: ${recipe.prepMinutes}mins`}</p>
       <p>{`Cook Time: ${recipe.cookMinutes}mins`}</p>
       <p>{`Servings: ${recipe.servings}`}</p>
