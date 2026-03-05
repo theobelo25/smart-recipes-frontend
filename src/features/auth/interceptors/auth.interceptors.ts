@@ -1,9 +1,10 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { showServerErrorToast } from "@/src/shared/lib/server-error-toast";
+import { API_BASE_URL } from "@/src/shared/lib/env";
 import { useAuthStore } from "../store/auth.store";
 
 export const authAxios = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: API_BASE_URL,
   withCredentials: true,
 });
 
