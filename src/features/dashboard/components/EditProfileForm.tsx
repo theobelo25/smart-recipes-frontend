@@ -57,7 +57,7 @@ export function EditProfileForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form id="signup-form" onSubmit={form.handleSubmit(onSubmit)}>
+        <form id="edit-profile-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
               name="username"
@@ -85,7 +85,7 @@ export function EditProfileForm() {
         <Field orientation="horizontal">
           <Button
             type="submit"
-            form="signup-form"
+            form="edit-profile-form"
             disabled={form.formState.isSubmitting}
           >
             {form.formState.isSubmitting ? "Signing up..." : "Submit"}

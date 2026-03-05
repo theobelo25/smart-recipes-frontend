@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "@/src/shared/ui/button";
 import {
   Dialog,
@@ -11,9 +14,18 @@ import {
 } from "@/src/shared/ui/dialog";
 import { AddPantryItemForm } from "./AddPantryItemForm";
 
-export default function AddPantryItemDialog() {
+type AddPantryItemDialogProps = {
+  /** When true, keep the user on the current page after adding (e.g. when opened from generate page). */
+  stayOnPageAfterAdd?: boolean;
+};
+
+export default function AddPantryItemDialog({
+  stayOnPageAfterAdd = false,
+}: AddPantryItemDialogProps = {}) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline">Add Pantry Item</Button>
       </DialogTrigger>
@@ -24,7 +36,10 @@ export default function AddPantryItemDialog() {
             Add an ingredient to your pantry!
           </DialogDescription>
         </DialogHeader>
-        <AddPantryItemForm />
+        <AddPantryItemForm
+          redirectAfterSuccess={stayOnPageAfterAdd ? null : "/pantry"}
+          onSuccess={stayOnPageAfterAdd ? () => setOpen(false) : undefined}
+        />
         <DialogFooter className="justify-between">
           <DialogClose asChild>
             <Button type="button">Close</Button>

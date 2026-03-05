@@ -3,7 +3,6 @@ import { Recipe } from "../types";
 export default function ActiveRecipe({ recipe }: { recipe: Recipe }) {
   return (
     <article>
-      <h3>{recipe.title}</h3>
       <p>{`Prep Time: ${recipe.prepMinutes}mins`}</p>
       <p>{`Cook Time: ${recipe.cookMinutes}mins`}</p>
       <p>{`Servings: ${recipe.servings}`}</p>

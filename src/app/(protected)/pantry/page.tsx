@@ -19,7 +19,7 @@ export default function PantryPage() {
           <Card>
             <CardHeader className="flex flex-col gap-4 items-start sm:flex-row sm:justify-between sm:items-center min-h-14">
               <CardTitle>Pantry</CardTitle>
-              <AddPantryItemDialog />
+              <AddPantryItemDialog stayOnPageAfterAdd />
             </CardHeader>
             <CardContent className="overflow-x-auto">
               <PantryItemTable pantryItems={pantryItems} isPantryPage={true} />

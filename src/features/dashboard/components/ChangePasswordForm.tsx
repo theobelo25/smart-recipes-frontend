@@ -57,7 +57,7 @@ export function ChangePasswordForm() {
         <CardDescription>Update your password!</CardDescription>
       </CardHeader>
       <CardContent>
-        <form id="signup-form" onSubmit={form.handleSubmit(onSubmit)}>
+        <form id="change-password-form" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup>
             <Controller
               name="oldPassword"
@@ -128,7 +128,7 @@ export function ChangePasswordForm() {
         <Field orientation="horizontal">
           <Button
             type="submit"
-            form="signup-form"
+            form="change-password-form"
             disabled={form.formState.isSubmitting}
           >
             {form.formState.isSubmitting ? "Signing up..." : "Submit"}

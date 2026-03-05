@@ -13,6 +13,7 @@ import { Button } from "@/src/shared/ui/button";
 import { useRecipeStore } from "../stores/recipes.store";
 import { useRouter } from "next/navigation";
 import { Pencil, Trash2 } from "lucide-react";
+import { ConfirmDeleteRecipeDialog } from "./ConfirmDeleteRecipeDialog";
 
 export function SavedRecipesTable({
   recipes,
@@ -23,13 +24,6 @@ export function SavedRecipesTable({
 }) {
   const router = useRouter();
   const removeRecipe = useRecipeStore((s) => s.removeRecipe);
-  const handleDeleteClick = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    id: string,
-  ) => {
-    e.stopPropagation();
-    removeRecipe(id);
-  };
 
   const handleEditClick = (e: React.MouseEvent<HTMLButtonElement>, slug: string) => {
     e.stopPropagation();
@@ -75,14 +69,23 @@ export function SavedRecipesTable({
                   >
                     <Pencil className="size-4" aria-hidden />
                   </Button>
-                  <Button
-                    type="button"
-                    variant={"outline"}
-                    onClick={(e) => handleDeleteClick(e, pi.id)}
-                    aria-label="Remove recipe"
-                  >
-                    <Trash2 className="size-4" aria-hidden />
-                  </Button>
+                  <ConfirmDeleteRecipeDialog
+                    recipeTitle={pi.title}
+                    onConfirm={async () => {
+                      await removeRecipe(pi.id);
+                      router.push("/saved");
+                    }}
+                    trigger={
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={(e) => e.stopPropagation()}
+                        aria-label="Remove recipe"
+                      >
+                        <Trash2 className="size-4" aria-hidden />
+                      </Button>
+                    }
+                  />
                 </div>
               </TableCell>
             )}

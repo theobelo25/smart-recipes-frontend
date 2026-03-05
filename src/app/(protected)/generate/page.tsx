@@ -21,6 +21,7 @@ import {
 } from "@/src/shared/ui/field";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import AddPantryItemDialog from "@/src/features/pantry/components/AddPantryItemDialog";
 import { PantryItemTable } from "@/src/features/pantry/components/PantryItemTable";
 import { LoadingSpinner } from "@/src/shared/components/LoadingSpinner";
 
@@ -69,10 +70,11 @@ export default function GenerateRecipesPage() {
       <main className="flex w-full flex-col items-center justify-center px-6 sm:px-8 md:px-10 xl:px-24 sm:items-start">
         <section className="grid grid-cols-1 gap-8 w-full xl:grid-cols-2">
           <Card>
-            <CardHeader>
+            <CardHeader className="flex flex-col gap-4 items-start sm:flex-row sm:justify-between sm:items-center">
               <CardTitle>
                 <h3>Your Pantry</h3>
               </CardTitle>
+              <AddPantryItemDialog stayOnPageAfterAdd />
             </CardHeader>
             <CardContent className="overflow-x-auto">
               <PantryItemTable
@@ -109,7 +111,7 @@ export default function GenerateRecipesPage() {
           <Card>
             <CardHeader className="flex flex-col gap-4 items-start sm:flex-row sm:justify-between sm:items-center">
               <CardTitle>Generate a recipe!</CardTitle>
-              <Button variant={"default"} onClick={handleGenerateClick}>
+              <Button variant="outline" onClick={handleGenerateClick}>
                 {generatedRecipe ? "Generate New Recipe" : "Generate Recipe!"}
               </Button>
             </CardHeader>

@@ -13,7 +13,17 @@ import { AddPantryItemDto, AddPantryItemSchema } from "../types";
 
 import { usePantryStore } from "../stores/pantry.store";
 
-export function AddPantryItemForm() {
+type AddPantryItemFormProps = {
+  /** If set, redirect to this path after add. If null, stay on current page. Omit for default "/pantry". */
+  redirectAfterSuccess?: string | null;
+  /** Called after a successful add (e.g. to close the dialog when staying on page). */
+  onSuccess?: () => void;
+};
+
+export function AddPantryItemForm({
+  redirectAfterSuccess = "/pantry",
+  onSuccess,
+}: AddPantryItemFormProps) {
   const addPantryItem = usePantryStore((s) => s.addPantryItem);
   const router = useRouter();
 
@@ -30,7 +40,11 @@ export function AddPantryItemForm() {
     try {
       addPantryItem(data);
 
-      router.replace("/pantry");
+      if (redirectAfterSuccess != null) {
+        router.replace(redirectAfterSuccess);
+      } else {
+        onSuccess?.();
+      }
     } catch {
       console.error("Could not add pantry item.");
     }
